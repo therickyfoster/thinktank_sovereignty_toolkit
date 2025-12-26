@@ -1,0 +1,1665 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!--
+    Zero-Harm + Anti-Inversion Note:
+    This page is designed to strengthen sovereignty through consent, transparency, and evidence. It avoids coercive framing, hidden telemetry, and manipulative UX.
+    Offline storage is local-only and user-resettable. No auto-send features. No secrets captured.
+  -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Paths Back — Sovereignty Toolkit for Policy & Decision Makers</title>
+  <style>
+    /* =========================
+       TOOLTIP: Global styling
+       - Purpose: readable, printable, accessible UI with parallax sections
+       - Extend: adjust CSS vars below; keep contrast high
+       - Outcome: calm, high-signal layout that works offline
+    ========================= */
+    :root{
+      --bg0:#0b0f16;
+      --bg1:#0f1724;
+      --card:#121b2a;
+      --card2:#0f1624;
+      --txt:#e7eefc;
+      --muted:#a9b7d3;
+      --accent:#7dd3fc;
+      --accent2:#a78bfa;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+
+      --shadow: 0 18px 55px rgba(0,0,0,.45);
+      --radius: 16px;
+      --radius2: 22px;
+      --maxw: 1100px;
+
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--txt);
+      background: radial-gradient(1000px 650px at 20% -10%, rgba(125,211,252,.20), transparent 55%),
+                  radial-gradient(900px 700px at 90% 0%, rgba(167,139,250,.18), transparent 55%),
+                  linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .sr-only{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:18px 16px 72px}
+    .glass{
+      background: linear-gradient(180deg, rgba(18,27,42,.82), rgba(15,22,36,.74));
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,14,22,.45);
+      color:var(--muted);
+      font-size:12px;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .chip strong{color:var(--txt); font-weight:650}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:10px 12px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(18,27,42,.85);
+      color:var(--txt);
+      box-shadow: 0 10px 30px rgba(0,0,0,.22);
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(125,211,252,.35)}
+    .btn:active{transform: translateY(0px)}
+    .btn.primary{background: linear-gradient(135deg, rgba(125,211,252,.20), rgba(167,139,250,.16)); border-color: rgba(125,211,252,.40)}
+    .btn.ghost{background: rgba(10,14,22,.20)}
+    .btn.danger{border-color: rgba(251,113,133,.35)}
+    .btn small{color:var(--muted)}
+    .row{display:flex; gap:14px; flex-wrap:wrap}
+    .col{flex:1 1 320px}
+    .muted{color:var(--muted)}
+    .kpi{display:flex; gap:12px; flex-wrap:wrap}
+    .kpi .card{flex:1 1 180px}
+    .card{
+      padding:14px 14px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(18,27,42,.72);
+      box-shadow: 0 12px 36px rgba(0,0,0,.22);
+    }
+    .card h3{margin:0 0 8px; font-size:15px}
+    .card p{margin:0; color:var(--muted); line-height:1.45}
+    .mono{font-family:var(--mono)}
+    .hr{height:1px; background:rgba(255,255,255,.10); margin:14px 0}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius: 999px;
+      background: rgba(52,211,153,.12);
+      border:1px solid rgba(52,211,153,.22);
+      color: var(--good);
+      font-size:12px;
+    }
+    .pill.warn{background: rgba(251,191,36,.12); border-color: rgba(251,191,36,.20); color: var(--warn)}
+    .pill.bad{background: rgba(251,113,133,.12); border-color: rgba(251,113,133,.22); color: var(--bad)}
+    .tag{
+      font-size:12px; padding:4px 8px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.10);
+      color: var(--muted);
+      background: rgba(0,0,0,.20);
+      user-select:none;
+    }
+
+    /* =========================
+       TOOLTIP: Sticky top bar
+       - Purpose: navigation, search, language, offline status
+       - Extend: add more nav anchors; translations via i18n keys
+       - Outcome: one-glance control panel
+    ========================= */
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      padding: 10px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(11,15,22,.92), rgba(11,15,22,.70));
+      backdrop-filter: blur(12px);
+    }
+    .topbar .inner{max-width:var(--maxw); margin:0 auto; display:flex; gap:10px; align-items:center; padding:0 6px}
+    .brand{
+      display:flex; align-items:center; gap:10px; min-width: 220px;
+    }
+    .logo{
+      width:34px; height:34px; border-radius: 12px;
+      background: radial-gradient(circle at 30% 25%, rgba(125,211,252,.95), rgba(167,139,250,.75));
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      position:relative;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:9px;
+      border-radius: 10px;
+      border:1px solid rgba(255,255,255,.50);
+      opacity:.35;
+    }
+    .brand .title{display:flex; flex-direction:column; line-height:1.05}
+    .brand .title strong{font-weight:800; letter-spacing:.2px}
+    .brand .title span{font-size:12px; color:var(--muted)}
+    nav{display:flex; gap:10px; flex-wrap:wrap}
+    nav a{
+      color: var(--muted);
+      padding: 7px 10px;
+      border-radius: 10px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.14);
+      font-size: 13px;
+    }
+    nav a:hover{color:var(--txt); border-color: rgba(125,211,252,.25); text-decoration:none}
+    .spacer{flex:1}
+    .search{
+      display:flex; align-items:center; gap:8px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(18,27,42,.55);
+      min-width: 220px;
+      max-width: 340px;
+      flex: 1 1 260px;
+    }
+    .search input{
+      width:100%;
+      border:none; outline:none;
+      background: transparent;
+      color: var(--txt);
+      font-size: 13px;
+    }
+    .statusDot{
+      width:10px; height:10px; border-radius: 999px;
+      background: rgba(251,191,36,.90);
+      box-shadow: 0 0 0 4px rgba(251,191,36,.12);
+    }
+    .statusDot.ok{background: rgba(52,211,153,.95); box-shadow: 0 0 0 4px rgba(52,211,153,.14)}
+    .langSel{
+      padding: 9px 10px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(18,27,42,.55);
+      color: var(--txt);
+      font-size: 13px;
+      outline:none;
+      cursor:pointer;
+    }
+
+    /* =========================
+       TOOLTIP: Splash
+       - Purpose: animated boot screen; reassures offline-first
+       - Extend: adjust slogans via i18n keys
+       - Outcome: smoother start + trust-building transparency
+    ========================= */
+    .splash{
+      position:fixed; inset:0; z-index:200;
+      display:grid; place-items:center;
+      background: radial-gradient(900px 650px at 20% 10%, rgba(125,211,252,.25), transparent 55%),
+                  radial-gradient(900px 650px at 90% 0%, rgba(167,139,250,.22), transparent 55%),
+                  linear-gradient(180deg, rgba(8,11,17,.98), rgba(8,11,17,.96));
+      transition: opacity .35s ease, transform .35s ease;
+    }
+    .splash.hide{opacity:0; transform: translateY(-10px); pointer-events:none}
+    .splashBox{
+      width:min(860px, calc(100vw - 24px));
+      padding:18px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(18,27,42,.55);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .splashBox:before{
+      content:"";
+      position:absolute; inset:-20px;
+      background: conic-gradient(from 180deg, rgba(125,211,252,.16), rgba(167,139,250,.14), rgba(52,211,153,.10), rgba(125,211,252,.16));
+      filter: blur(20px);
+      opacity:.55;
+      animation: spin 6s linear infinite;
+    }
+    @keyframes spin {to{transform: rotate(360deg)}}
+    .splashInner{position:relative; display:flex; gap:16px; align-items:center; flex-wrap:wrap}
+    .splashInner .big{
+      flex: 1 1 320px;
+    }
+    .splashInner h1{margin:0; font-size: 28px}
+    .splashInner p{margin:10px 0 0; color:var(--muted); line-height:1.5}
+    .meter{
+      flex: 0 1 260px;
+      padding:14px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,14,22,.35);
+    }
+    .bar{height:10px; border-radius:999px; background: rgba(255,255,255,.10); overflow:hidden}
+    .bar > i{display:block; height:100%; width: 20%; background: linear-gradient(90deg, rgba(125,211,252,.95), rgba(167,139,250,.90)); border-radius:999px; animation: load 1.8s ease-in-out infinite}
+    @keyframes load{
+      0%{transform: translateX(-60%)}
+      50%{transform: translateX(140%)}
+      100%{transform: translateX(260%)}
+    }
+    .splashMeta{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+
+    /* =========================
+       TOOLTIP: Hero / parallax
+       - Purpose: narrative framing + immediate actions
+       - Extend: add modules; keep cards short for translation coverage
+       - Outcome: decision-makers see "paths back" without doom spiral
+    ========================= */
+    header.hero{
+      margin-top:18px;
+      padding: 18px;
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,.10);
+      background: radial-gradient(900px 500px at 20% 0%, rgba(125,211,252,.18), transparent 60%),
+                  radial-gradient(900px 500px at 90% 0%, rgba(167,139,250,.14), transparent 60%),
+                  linear-gradient(180deg, rgba(18,27,42,.72), rgba(15,22,36,.58));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .heroGrid{display:grid; grid-template-columns: 1.2fr .8fr; gap:14px}
+    @media (max-width: 900px){.heroGrid{grid-template-columns: 1fr}}
+    .hero h1{margin:0 0 8px; font-size: 30px}
+    .hero .lead{color: var(--muted); line-height:1.55; margin:0 0 12px}
+    .heroActions{display:flex; gap:10px; flex-wrap:wrap}
+    .heroAside{
+      padding: 14px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(10,14,22,.28);
+    }
+    .heroAside h3{margin:0 0 8px; font-size:15px}
+    .heroAside ul{margin:0; padding-left:18px; color:var(--muted); line-height:1.55}
+    .heroAside li{margin:6px 0}
+    .parallaxGlow{
+      position:absolute; inset:-60px;
+      background: radial-gradient(500px 220px at var(--mx, 30%) var(--my, 30%), rgba(125,211,252,.18), transparent 60%),
+                  radial-gradient(500px 220px at calc(var(--mx, 30%) + 40%) calc(var(--my, 30%) - 10%), rgba(167,139,250,.14), transparent 60%);
+      pointer-events:none;
+      transform: translate3d(calc((var(--px,0) * -1px)), calc((var(--py,0) * -1px)), 0);
+      transition: transform .05s linear;
+      opacity:.9;
+    }
+
+    /* =========================
+       TOOLTIP: Collapsibles / modules
+       - Purpose: long-form content without overwhelming the reader
+       - Extend: add <details> blocks; ensure i18n keys exist
+       - Outcome: quick scanning + deep dive
+    ========================= */
+    section{margin-top:16px}
+    details{
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(18,27,42,.60);
+      box-shadow: 0 12px 36px rgba(0,0,0,.18);
+      overflow:hidden;
+    }
+    details + details{margin-top:12px}
+    summary{
+      list-style:none;
+      cursor:pointer;
+      padding: 14px 14px;
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+      user-select:none;
+    }
+    summary::-webkit-details-marker{display:none}
+    .sumLeft{display:flex; align-items:center; gap:10px; flex: 1}
+    .icon{
+      width:28px; height:28px; border-radius: 10px;
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+    }
+    .sumTitle{display:flex; flex-direction:column}
+    .sumTitle strong{font-size:15px}
+    .sumTitle span{font-size:12px; color:var(--muted)}
+    .sumRight{display:flex; align-items:center; gap:10px}
+    .modBody{padding: 0 14px 14px}
+    .modBody p{color: var(--muted); line-height:1.55; margin: 10px 0}
+    .grid2{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+    @media (max-width: 880px){.grid2{grid-template-columns:1fr}}
+    .list{
+      margin:0; padding-left: 18px; color: var(--muted); line-height:1.55
+    }
+    .list li{margin: 6px 0}
+    .linkbox{
+      padding: 12px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(10,14,22,.24);
+    }
+    .linkbox h4{margin:0 0 8px; font-size: 13px}
+    .linkbox a{display:inline-block; margin: 6px 0}
+    .checkline{
+      display:flex; align-items:flex-start; gap:10px;
+      padding:10px 10px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+      margin:8px 0;
+    }
+    .checkline input{margin-top:3px}
+    .checkline .txt{flex:1}
+    .checkline .txt b{color: var(--txt)}
+    .checkline .txt div{color: var(--muted); font-size: 13px; margin-top:4px; line-height:1.45}
+
+    /* =========================
+       TOOLTIP: HUD + constellation
+       - Purpose: gentle gamification for completion + continuity
+       - Extend: add more metrics in computeStats()
+       - Outcome: "progress" replaces doom
+    ========================= */
+    .hud{
+      position:fixed; right: 14px; bottom: 14px; z-index:60;
+      width: min(360px, calc(100vw - 28px));
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(18,27,42,.84), rgba(15,22,36,.74));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hudHead{
+      padding: 12px 12px;
+      display:flex; align-items:center; gap:10px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .hudHead strong{font-size: 14px}
+    .hudHead .mini{color: var(--muted); font-size: 12px}
+    .hudBody{padding: 10px 12px}
+    .hudRow{display:flex; gap:12px; flex-wrap:wrap}
+    .hudStat{
+      flex:1 1 90px;
+      padding:10px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+    }
+    .hudStat .v{font-size: 18px; font-weight: 800}
+    .hudStat .k{font-size: 12px; color: var(--muted)}
+    #constellation{
+      width:100%; height: 120px;
+      display:block;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: radial-gradient(500px 160px at 30% 30%, rgba(125,211,252,.10), transparent 55%),
+                  radial-gradient(500px 160px at 80% 20%, rgba(167,139,250,.10), transparent 55%),
+                  rgba(0,0,0,.12);
+    }
+    .hudActions{display:flex; gap:10px; margin-top:10px; flex-wrap:wrap}
+    .hudActions .btn{flex:1}
+
+    /* =========================
+       TOOLTIP: Footer + print
+       - Purpose: transparency, zero-harm note, attributions
+       - Extend: add more references; keep it short
+       - Outcome: trust-by-design
+    ========================= */
+    footer{
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(10,14,22,.28);
+      color: var(--muted);
+      line-height:1.55;
+    }
+    footer h3{margin:0 0 8px; color: var(--txt); font-size: 14px}
+    footer ul{margin:8px 0 0; padding-left:18px}
+    footer li{margin:6px 0}
+    .fine{font-size:12px; color: rgba(169,183,211,.88)}
+    .warnbox{
+      padding: 12px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(251,191,36,.22);
+      background: rgba(251,191,36,.10);
+      color: rgba(251,191,36,.95);
+      line-height:1.5;
+    }
+
+    @media print{
+      .topbar,.hud,.splash{display:none !important}
+      body{background:white; color:black}
+      a{color:black; text-decoration:underline}
+      details{break-inside:avoid}
+      summary{border-bottom:1px solid #ccc}
+      .glass, header.hero, details, footer{box-shadow:none}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- =========================
+       TOOLTIP: Noscript fallback
+       - Purpose: minimum viable content without JS
+       - Extend: keep links stable
+       - Outcome: still usable in locked-down environments
+  ========================== -->
+  <noscript>
+    <div style="max-width:1100px;margin:18px auto;padding:14px;border-radius:16px;border:1px solid #999;background:#fff;color:#000;">
+      <h2>Paths Back — Sovereignty Toolkit</h2>
+      <p>This page is designed to work offline-first and includes local-only state tracking. JavaScript is required for search, translations, and offline caching.</p>
+      <p>Core resources:</p>
+      <ul>
+        <li><a href="https://thegovlab.org/">The GovLab</a></li>
+        <li><a href="https://www.worldbank.org/en/publication/worldwide-governance-indicators">Worldwide Governance Indicators (World Bank)</a></li>
+        <li><a href="https://www.oecd.org/en/data/indicators/trust-in-government.html">OECD: Trust in government indicator</a></li>
+        <li><a href="https://www.undp.org/sites/g/files/zskgke326/files/2025-09/undp-toolkit-to-strengthen-multi-level_governance-in-crisis-affected_settings.pdf">UNDP: Multi-level governance toolkit (PDF)</a></li>
+      </ul>
+      <p><b>Zero-Harm:</b> No coercion, no hidden telemetry, no auto-send features.</p>
+    </div>
+  </noscript>
+
+  <!-- Splash -->
+  <div class="splash" id="splash" aria-hidden="true">
+    <div class="splashBox">
+      <div class="splashInner">
+        <div class="big">
+          <h1 data-i18n="splash_title">Paths Back</h1>
+          <p data-i18n="splash_sub">
+            A calm, offline-capable toolkit to help institutions rebuild trust, coordination, and legitimacy — without doom spirals or coercive framing.
+          </p>
+          <div class="splashMeta">
+            <span class="chip"><strong data-i18n="splash_localonly">Local-only</strong><span data-i18n="splash_state"> state • resettable</span></span>
+            <span class="chip"><strong data-i18n="splash_offline">Offline</strong><span data-i18n="splash_ready"> ready</span></span>
+            <span class="chip"><strong data-i18n="splash_transparent">Transparent</strong><span data-i18n="splash_design"> by design</span></span>
+          </div>
+        </div>
+        <div class="meter">
+          <div class="pill" style="margin-bottom:10px"><span aria-hidden="true">🧭</span> <span data-i18n="splash_boot">Booting tools…</span></div>
+          <div class="bar" aria-label="Loading"><i></i></div>
+          <p class="fine" style="margin:10px 0 0" data-i18n="splash_hint">
+            Tip: use Search to find “trust”, “misinfo”, “coordination”, “resilience”, “social contract”.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top bar -->
+  <div class="topbar" role="banner">
+    <div class="inner">
+      <div class="brand" title="TOOLTIP: Brand - anchor + quick meaning. Extend: swap title keys in i18n. Outcome: consistent identity.">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="title">
+          <strong data-i18n="brand_title">Paths Back</strong>
+          <span data-i18n="brand_sub">Sovereignty Toolkit • Offline-first • Local-only</span>
+        </div>
+      </div>
+
+      <nav aria-label="Primary">
+        <a href="#start" data-i18n="nav_start">Start</a>
+        <a href="#modules" data-i18n="nav_modules">Modules</a>
+        <a href="#score" data-i18n="nav_score">Score</a>
+        <a href="#sources" data-i18n="nav_sources">Sources</a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <div class="search" title="TOOLTIP: Search - client-side, offline. Extend: include more fields in index. Outcome: instant retrieval.">
+        <span aria-hidden="true">🔎</span>
+        <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Search modules…" />
+        <span class="statusDot" id="netDot" title="Network"></span>
+      </div>
+
+      <select class="langSel" id="lang" aria-label="Language selector" title="TOOLTIP: Language - instant local translation layers. Extend: add new languages in i18n map. Outcome: multilingual access.">
+        <!-- 20+ major languages -->
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="ar">العربية</option>
+        <option value="zh">中文</option>
+        <option value="ru">Русский</option>
+        <option value="hi">हिन्दी</option>
+        <option value="bn">বাংলা</option>
+        <option value="pt">Português</option>
+        <option value="de">Deutsch</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+        <option value="it">Italiano</option>
+        <option value="tr">Türkçe</option>
+        <option value="vi">Tiếng Việt</option>
+        <option value="id">Bahasa Indonesia</option>
+        <option value="sw">Kiswahili</option>
+        <option value="fa">فارسی</option>
+        <option value="ur">اردو</option>
+        <option value="he">עברית</option>
+        <option value="nl">Nederlands</option>
+        <option value="pl">Polski</option>
+      </select>
+
+      <button class="btn ghost" id="resetAll" title="TOOLTIP: Reset - clears local-only state. Extend: add selective resets. Outcome: user control.">
+        ♻️ <span data-i18n="btn_reset">Reset</span>
+      </button>
+    </div>
+  </div>
+
+  <main class="wrap" id="start">
+    <header class="hero" aria-label="Overview">
+      <div class="parallaxGlow" id="glow" aria-hidden="true"></div>
+      <div class="heroGrid">
+        <div>
+          <h1 data-i18n="hero_title">Tools to Help Institutions Find Their Path Back</h1>
+          <p class="lead" data-i18n="hero_lead">
+            Collapse can arrive via morale failure, institutional distrust, and broken shared reality — even without climate being the immediate trigger.
+            This page is a practical “return path” kit: diagnose what’s breaking, choose interventions, measure recovery, and rebuild legitimacy.
+          </p>
+          <div class="heroActions">
+            <button class="btn primary" id="openFirst" title="TOOLTIP: Quick start - opens the first module. Extend: point to your preferred module. Outcome: reduces friction.">
+              🚀 <span data-i18n="btn_quickstart">Quick Start</span> <small data-i18n="btn_quickstart_sub">Open Module 1</small>
+            </button>
+            <button class="btn" id="expandAll" title="TOOLTIP: Expand - reveals all modules. Extend: add collapseAll too. Outcome: power browsing.">
+              📚 <span data-i18n="btn_expand">Expand All</span>
+            </button>
+            <button class="btn" id="print" title="TOOLTIP: Print - for meetings/briefings. Extend: add PDF export (client-side) if needed. Outcome: physical handoff.">
+              🖨️ <span data-i18n="btn_print">Print View</span>
+            </button>
+          </div>
+
+          <div class="hr"></div>
+          <div class="warnbox">
+            <b data-i18n="note_header">Important framing:</b>
+            <span data-i18n="note_body">
+              Simulations are models, not prophecies. Use them to widen options, reduce harm, and restore agency — not to justify coercion or fatalism.
+            </span>
+          </div>
+        </div>
+
+        <aside class="heroAside">
+          <h3 data-i18n="aside_title">How to Use This</h3>
+          <ul>
+            <li data-i18n="aside_li1">Pick 1–2 modules for your current bottleneck (trust, coordination, information integrity).</li>
+            <li data-i18n="aside_li2">Complete the checklists. Each item nudges the HUD score + streak.</li>
+            <li data-i18n="aside_li3">Use the linked sources for deeper evidence and implementation playbooks.</li>
+            <li data-i18n="aside_li4">Reset anytime. All data stays on this device unless you export manually.</li>
+          </ul>
+          <div class="hr"></div>
+          <div class="kpi">
+            <div class="card">
+              <h3 data-i18n="kpi1_title">Goal</h3>
+              <p data-i18n="kpi1_body">Restore legitimacy by improving transparency, competence signals, and shared reality.</p>
+            </div>
+            <div class="card">
+              <h3 data-i18n="kpi2_title">Method</h3>
+              <p data-i18n="kpi2_body">Small reversible steps + measurement + public learning loops.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <section id="modules" aria-label="Modules">
+      <div class="row" style="align-items:center; justify-content:space-between; margin: 14px 2px 10px;">
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+          <span class="chip"><strong data-i18n="mod_label">Modules</strong><span data-i18n="mod_label_sub"> (collapsible)</span></span>
+          <span class="chip"><strong data-i18n="search_tip">Search tip:</strong><span data-i18n="search_tip_sub"> try “trust”, “rumor”, “delivery”, “metrics”.</span></span>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <button class="btn ghost" id="collapseAll">🧊 <span data-i18n="btn_collapse">Collapse All</span></button>
+          <button class="btn ghost" id="export">📤 <span data-i18n="btn_export">Export</span></button>
+          <button class="btn ghost danger" id="wipe">🧨 <span data-i18n="btn_wipe">Wipe Local Data</span></button>
+        </div>
+      </div>
+
+      <!-- MODULE 1 -->
+      <details class="module" id="m1" data-mod="m1">
+        <summary>
+          <div class="sumLeft">
+            <div class="icon" aria-hidden="true">🧠</div>
+            <div class="sumTitle">
+              <strong data-i18n="m1_title">1) Diagnose the Real Failure Mode</strong>
+              <span data-i18n="m1_sub">Is it competence, integrity, or shared reality?</span>
+            </div>
+          </div>
+          <div class="sumRight">
+            <span class="tag" data-i18n="tag_foundation">Foundation</span>
+            <label class="chip" title="TOOLTIP: Mark module complete. Extend: add weights per module. Outcome: progression feedback.">
+              <input type="checkbox" class="modDone" data-mod-done="m1" />
+              <span data-i18n="complete">Complete</span>
+            </label>
+          </div>
+        </summary>
+        <div class="modBody">
+          <p data-i18n="m1_p1">
+            Most institutional collapses look like “everything is failing” from the inside. Usually, one primary failure is driving the others:
+            (A) competence (delivery), (B) integrity (corruption/conflicts), or (C) shared reality (information breakdown).
+          </p>
+
+          <div class="grid2">
+            <div class="linkbox">
+              <h4 data-i18n="m1_box1">Rapid triage questions</h4>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m1_q1" />
+                <div class="txt">
+                  <b data-i18n="m1_q1_b">What promise is being broken?</b>
+                  <div data-i18n="m1_q1_d">Name it in one sentence, without blame language.</div>
+                </div>
+              </div>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m1_q2" />
+                <div class="txt">
+                  <b data-i18n="m1_q2_b">Where is coordination failing?</b>
+                  <div data-i18n="m1_q2_d">Across agencies, regions, incentives, or data systems?</div>
+                </div>
+              </div>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m1_q3" />
+                <div class="txt">
+                  <b data-i18n="m1_q3_b">What would “one week better” look like?</b>
+                  <div data-i18n="m1_q3_d">Pick a measurable improvement, not a speech.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="linkbox">
+              <h4 data-i18n="m1_box2">Evidence anchors</h4>
+              <a href="https://www.oecd.org/en/data/indicators/trust-in-government.html" target="_blank" rel="noopener noreferrer">
+                <span aria-hidden="true">🔗</span> <span data-i18n="m1_link1">OECD: Trust in government indicator</span>
+              </a><br/>
+              <a href="https://www.oecd.org/en/publications/oecd-survey-on-drivers-of-trust-in-public-institutions-2024-results_9a20554b-en.html" target="_blank" rel="noopener noreferrer">
+                <span aria-hidden="true">🔗</span> <span data-i18n="m1_link2">OECD: Drivers of Trust Survey (2024)</span>
+              </a><br/>
+              <a href="https://www.worldbank.org/en/publication/worldwide-governance-indicators" target="_blank" rel="noopener noreferrer">
+                <span aria-hidden="true">🔗</span> <span data-i18n="m1_link3">World Bank: Worldwide Governance Indicators (WGI)</span>
+              </a>
+              <p class="fine" data-i18n="m1_fine">
+                Use these as “common reference points” to reduce argument heat and increase shared measurement.
+              </p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- MODULE 2 -->
+      <details class="module" id="m2" data-mod="m2">
+        <summary>
+          <div class="sumLeft">
+            <div class="icon" aria-hidden="true">🤝</div>
+            <div class="sumTitle">
+              <strong data-i18n="m2_title">2) Rebuild the Social Contract (without propaganda)</strong>
+              <span data-i18n="m2_sub">Legitimacy comes from truth + delivery + fairness signals.</span>
+            </div>
+          </div>
+          <div class="sumRight">
+            <span class="tag" data-i18n="tag_trust">Trust</span>
+            <label class="chip">
+              <input type="checkbox" class="modDone" data-mod-done="m2" />
+              <span data-i18n="complete">Complete</span>
+            </label>
+          </div>
+        </summary>
+        <div class="modBody">
+          <p data-i18n="m2_p1">
+            The fastest trust gains usually come from: (1) clear commitments, (2) visible follow-through, (3) admitting uncertainty early, and (4) fair process.
+            The goal is not persuasion; the goal is predictable honesty.
+          </p>
+          <div class="grid2">
+            <div class="linkbox">
+              <h4 data-i18n="m2_box1">Commitment loop</h4>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m2_c1" />
+                <div class="txt">
+                  <b data-i18n="m2_c1_b">Publish “3 promises, 3 metrics, 3 weeks”.</b>
+                  <div data-i18n="m2_c1_d">Keep it small enough to deliver. Update weekly in public.</div>
+                </div>
+              </div>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m2_c2" />
+                <div class="txt">
+                  <b data-i18n="m2_c2_b">Create an error budget for messaging.</b>
+                  <div data-i18n="m2_c2_d">Track corrections. Reward early truth over late perfection.</div>
+                </div>
+              </div>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m2_c3" />
+                <div class="txt">
+                  <b data-i18n="m2_c3_b">Guarantee a dignified exit path.</b>
+                  <div data-i18n="m2_c3_d">Make it safe for staff and citizens to report failure without retaliation.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="linkbox">
+              <h4 data-i18n="m2_box2">Implementation ideas</h4>
+              <ul class="list">
+                <li data-i18n="m2_li1">Short public “decision records” (what we chose, why, what would change our mind).</li>
+                <li data-i18n="m2_li2">Plain-language budget + delivery dashboard (even if imperfect).</li>
+                <li data-i18n="m2_li3">Independent audit/ombuds with real power to publish.</li>
+              </ul>
+              <p class="fine" data-i18n="m2_fine">
+                Trust grows when people can predict reality better than rumor can.
+              </p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- MODULE 3 -->
+      <details class="module" id="m3" data-mod="m3">
+        <summary>
+          <div class="sumLeft">
+            <div class="icon" aria-hidden="true">🛰️</div>
+            <div class="sumTitle">
+              <strong data-i18n="m3_title">3) Restore Shared Reality (info integrity)</strong>
+              <span data-i18n="m3_sub">Counter rumor with verification infrastructure, not censorship theater.</span>
+            </div>
+          </div>
+          <div class="sumRight">
+            <span class="tag" data-i18n="tag_info">Information</span>
+            <label class="chip">
+              <input type="checkbox" class="modDone" data-mod-done="m3" />
+              <span data-i18n="complete">Complete</span>
+            </label>
+          </div>
+        </summary>
+        <div class="modBody">
+          <p data-i18n="m3_p1">
+            When people stop agreeing on basic facts, policy becomes impossible. The fix is to make verification cheaper than outrage:
+            publish data, publish methods, publish uncertainty, and publish corrections.
+          </p>
+
+          <div class="grid2">
+            <div class="linkbox">
+              <h4 data-i18n="m3_box1">Verification kit</h4>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m3_v1" />
+                <div class="txt">
+                  <b data-i18n="m3_v1_b">Create a “single source of official truth” page.</b>
+                  <div data-i18n="m3_v1_d">Versioned updates, timestamped changes, and a corrections log.</div>
+                </div>
+              </div>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m3_v2" />
+                <div class="txt">
+                  <b data-i18n="m3_v2_b">Publish decision evidence, not just decisions.</b>
+                  <div data-i18n="m3_v2_d">Data sources + assumptions + trade-offs in human language.</div>
+                </div>
+              </div>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m3_v3" />
+                <div class="txt">
+                  <b data-i18n="m3_v3_b">Red-team your own communications.</b>
+                  <div data-i18n="m3_v3_d">Test how messages can be misunderstood or weaponized.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="linkbox">
+              <h4 data-i18n="m3_box2">Governance innovation references</h4>
+              <a href="https://thegovlab.org/" target="_blank" rel="noopener noreferrer">
+                <span aria-hidden="true">🔗</span> <span data-i18n="m3_link1">The GovLab (governance innovation)</span>
+              </a><br/>
+              <a href="https://ailocalism.org/" target="_blank" rel="noopener noreferrer">
+                <span aria-hidden="true">🔗</span> <span data-i18n="m3_link2">AI Localism (responsible AI at local level)</span>
+              </a>
+              <p class="fine" data-i18n="m3_fine">
+                Aim for “trustworthy systems” more than “trusted leaders.”
+              </p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- MODULE 4 -->
+      <details class="module" id="m4" data-mod="m4">
+        <summary>
+          <div class="sumLeft">
+            <div class="icon" aria-hidden="true">🧩</div>
+            <div class="sumTitle">
+              <strong data-i18n="m4_title">4) Fix Coordination (the hidden killer)</strong>
+              <span data-i18n="m4_sub">Align incentives, interfaces, and ownership.</span>
+            </div>
+          </div>
+          <div class="sumRight">
+            <span class="tag" data-i18n="tag_coord">Coordination</span>
+            <label class="chip">
+              <input type="checkbox" class="modDone" data-mod-done="m4" />
+              <span data-i18n="complete">Complete</span>
+            </label>
+          </div>
+        </summary>
+        <div class="modBody">
+          <p data-i18n="m4_p1">
+            Institutions often die by “interface.” Not the internet interface — the organizational interface:
+            unclear ownership, incompatible data, contradictory incentives, and slow feedback.
+          </p>
+          <div class="grid2">
+            <div class="linkbox">
+              <h4 data-i18n="m4_box1">Coordination checklist</h4>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m4_k1" />
+                <div class="txt">
+                  <b data-i18n="m4_k1_b">Define one accountable owner per outcome.</b>
+                  <div data-i18n="m4_k1_d">Not “everyone”, not “a committee”. One neck, supported by many hands.</div>
+                </div>
+              </div>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m4_k2" />
+                <div class="txt">
+                  <b data-i18n="m4_k2_b">Create shared operational definitions.</b>
+                  <div data-i18n="m4_k2_d">If agencies define “success” differently, you get phantom progress.</div>
+                </div>
+              </div>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m4_k3" />
+                <div class="txt">
+                  <b data-i18n="m4_k3_b">Shorten feedback loops.</b>
+                  <div data-i18n="m4_k3_d">Daily/weekly signals beat quarterly reports during instability.</div>
+                </div>
+              </div>
+            </div>
+            <div class="linkbox">
+              <h4 data-i18n="m4_box2">Crisis governance resources</h4>
+              <a href="https://www.undp.org/sites/g/files/zskgke326/files/2025-09/undp-toolkit-to-strengthen-multi-level_governance-in-crisis-affected_settings.pdf" target="_blank" rel="noopener noreferrer">
+                <span aria-hidden="true">🔗</span> <span data-i18n="m4_link1">UNDP: Multi-level governance toolkit (PDF)</span>
+              </a><br/>
+              <a href="https://www.undp.org/publications/global-toolkit-3x6-approach-building-resilience-through-jobs-and-livelihoods" target="_blank" rel="noopener noreferrer">
+                <span aria-hidden="true">🔗</span> <span data-i18n="m4_link2">UNDP: 3x6 resilience & livelihoods toolkit</span>
+              </a>
+              <p class="fine" data-i18n="m4_fine">
+                Multi-level governance works best when roles are explicit and data is shared by default.
+              </p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- MODULE 5 -->
+      <details class="module" id="m5" data-mod="m5">
+        <summary>
+          <div class="sumLeft">
+            <div class="icon" aria-hidden="true">📏</div>
+            <div class="sumTitle">
+              <strong data-i18n="m5_title">5) Measure Recovery (so it’s not vibes)</strong>
+              <span data-i18n="m5_sub">Simple metrics that track legitimacy, delivery, and fairness.</span>
+            </div>
+          </div>
+          <div class="sumRight">
+            <span class="tag" data-i18n="tag_metrics">Metrics</span>
+            <label class="chip">
+              <input type="checkbox" class="modDone" data-mod-done="m5" />
+              <span data-i18n="complete">Complete</span>
+            </label>
+          </div>
+        </summary>
+        <div class="modBody">
+          <p data-i18n="m5_p1">
+            Your measurement system should be boring and resistant to spin. Measure what citizens feel in their daily interface with the state:
+            speed, fairness, clarity, and correction.
+          </p>
+          <div class="grid2">
+            <div class="linkbox">
+              <h4 data-i18n="m5_box1">Starter metrics (pick 5)</h4>
+              <ul class="list">
+                <li data-i18n="m5_li1">Time-to-resolution for top 3 public services.</li>
+                <li data-i18n="m5_li2">% decisions with published decision record + evidence.</li>
+                <li data-i18n="m5_li3">Correction latency (time to publicly correct an error).</li>
+                <li data-i18n="m5_li4">Perceived fairness pulse (short survey, consistent wording).</li>
+                <li data-i18n="m5_li5">Frontline staff burnout proxy (retention/absence trends).</li>
+              </ul>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m5_k1" />
+                <div class="txt">
+                  <b data-i18n="m5_k1_b">Publish a weekly “learning memo.”</b>
+                  <div data-i18n="m5_k1_d">What worked, what didn’t, what changes next week.</div>
+                </div>
+              </div>
+            </div>
+            <div class="linkbox">
+              <h4 data-i18n="m5_box2">Governance baselines</h4>
+              <a href="https://databank.worldbank.org/source/worldwide-governance-indicators" target="_blank" rel="noopener noreferrer">
+                <span aria-hidden="true">🔗</span> <span data-i18n="m5_link1">World Bank DataBank: WGI dataset</span>
+              </a><br/>
+              <a href="https://www.oecd.org/en/topics/sub-issues/trust-in-government.html" target="_blank" rel="noopener noreferrer">
+                <span aria-hidden="true">🔗</span> <span data-i18n="m5_link2">OECD: Trust in government topic page</span>
+              </a>
+              <p class="fine" data-i18n="m5_fine">
+                Baselines help you tell the difference between “hard times” and “system failure.”
+              </p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- MODULE 6 -->
+      <details class="module" id="m6" data-mod="m6">
+        <summary>
+          <div class="sumLeft">
+            <div class="icon" aria-hidden="true">🧯</div>
+            <div class="sumTitle">
+              <strong data-i18n="m6_title">6) Crisis Protocol: Stabilize Morale Without Lying</strong>
+              <span data-i18n="m6_sub">Truthful reassurance + actionable steps + visible care.</span>
+            </div>
+          </div>
+          <div class="sumRight">
+            <span class="tag" data-i18n="tag_crisis">Crisis</span>
+            <label class="chip">
+              <input type="checkbox" class="modDone" data-mod-done="m6" />
+              <span data-i18n="complete">Complete</span>
+            </label>
+          </div>
+        </summary>
+        <div class="modBody">
+          <p data-i18n="m6_p1">
+            Morale collapses when people feel: (1) blind, (2) alone, or (3) trapped. Counter with: clarity, community, and exit ramps.
+            Your job is to make constructive action feel possible again.
+          </p>
+          <div class="grid2">
+            <div class="linkbox">
+              <h4 data-i18n="m6_box1">Stabilization checklist</h4>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m6_s1" />
+                <div class="txt">
+                  <b data-i18n="m6_s1_b">Daily “known / unknown / next” bulletin.</b>
+                  <div data-i18n="m6_s1_d">Short. Timestamped. Includes one practical next step.</div>
+                </div>
+              </div>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m6_s2" />
+                <div class="txt">
+                  <b data-i18n="m6_s2_b">Protect frontline truth-tellers.</b>
+                  <div data-i18n="m6_s2_d">No retaliation for raising risks; reward signal quality.</div>
+                </div>
+              </div>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m6_s3" />
+                <div class="txt">
+                  <b data-i18n="m6_s3_b">Create a “help map” for citizens.</b>
+                  <div data-i18n="m6_s3_d">Where to go, what to bring, how long it takes, what’s free.</div>
+                </div>
+              </div>
+            </div>
+            <div class="linkbox">
+              <h4 data-i18n="m6_box2">Resilience resources</h4>
+              <a href="https://ses-toolkit.info.undp.org/sustainability-and-resilience" target="_blank" rel="noopener noreferrer">
+                <span aria-hidden="true">🔗</span> <span data-i18n="m6_link1">UNDP SES Toolkit: sustainability & resilience</span>
+              </a><br/>
+              <a href="https://www.undp.org/publications/strengthening-disaster-risk-governance" target="_blank" rel="noopener noreferrer">
+                <span aria-hidden="true">🔗</span> <span data-i18n="m6_link2">UNDP: strengthening disaster risk governance</span>
+              </a>
+              <p class="fine" data-i18n="m6_fine">
+                “Calm” is not silence — it’s honest structure.
+              </p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- MODULE 7 -->
+      <details class="module" id="m7" data-mod="m7">
+        <summary>
+          <div class="sumLeft">
+            <div class="icon" aria-hidden="true">🧪</div>
+            <div class="sumTitle">
+              <strong data-i18n="m7_title">7) Run Safe Simulations (tabletop / scenario)</strong>
+              <span data-i18n="m7_sub">Model the institution, not your identity. Prevent coercive drift.</span>
+            </div>
+          </div>
+          <div class="sumRight">
+            <span class="tag" data-i18n="tag_sim">Simulation</span>
+            <label class="chip">
+              <input type="checkbox" class="modDone" data-mod-done="m7" />
+              <span data-i18n="complete">Complete</span>
+            </label>
+          </div>
+        </summary>
+        <div class="modBody">
+          <p data-i18n="m7_p1">
+            Scenario work is powerful because it makes hidden assumptions visible. Keep it safe by requiring consent, defining stop rules,
+            and separating “model output” from “moral mandate.”
+          </p>
+
+          <div class="grid2">
+            <div class="linkbox">
+              <h4 data-i18n="m7_box1">Scenario structure</h4>
+              <ul class="list">
+                <li data-i18n="m7_li1">Define variables: trust, legitimacy, service delivery, info integrity, incentives.</li>
+                <li data-i18n="m7_li2">Inject shocks: rumor spike, budget freeze, leadership scandal, outage, protest.</li>
+                <li data-i18n="m7_li3">Track outcomes: time-to-correction, coordination speed, perceived fairness, violence risk.</li>
+              </ul>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m7_s1" />
+                <div class="txt">
+                  <b data-i18n="m7_s1_b">Write 3 “recovery endings,” not 1 collapse ending.</b>
+                  <div data-i18n="m7_s1_d">Prevent fatalism. Practice repair.</div>
+                </div>
+              </div>
+            </div>
+            <div class="linkbox">
+              <h4 data-i18n="m7_box2">Guardrails</h4>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m7_g1" />
+                <div class="txt">
+                  <b data-i18n="m7_g1_b">No coercion rule.</b>
+                  <div data-i18n="m7_g1_d">Any intervention must preserve consent and legal rights.</div>
+                </div>
+              </div>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m7_g2" />
+                <div class="txt">
+                  <b data-i18n="m7_g2_b">Stop rule.</b>
+                  <div data-i18n="m7_g2_d">If participants feel overwhelmed or dehumanized, pause and debrief.</div>
+                </div>
+              </div>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m7_g3" />
+                <div class="txt">
+                  <b data-i18n="m7_g3_b">Publish lessons, not scapegoats.</b>
+                  <div data-i18n="m7_g3_d">The goal is learning, not blame.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- MODULE 8 -->
+      <details class="module" id="m8" data-mod="m8">
+        <summary>
+          <div class="sumLeft">
+            <div class="icon" aria-hidden="true">🧬</div>
+            <div class="sumTitle">
+              <strong data-i18n="m8_title">8) Build “Anti-Inversion” Institutions</strong>
+              <span data-i18n="m8_sub">Reduce manipulation risk through transparency and user control.</span>
+            </div>
+          </div>
+          <div class="sumRight">
+            <span class="tag" data-i18n="tag_safety">Safety</span>
+            <label class="chip">
+              <input type="checkbox" class="modDone" data-mod-done="m8" />
+              <span data-i18n="complete">Complete</span>
+            </label>
+          </div>
+        </summary>
+        <div class="modBody">
+          <p data-i18n="m8_p1">
+            “Anti-inversion” means systems that resist narrative coercion: they make intent visible, allow audits, and preserve user agency.
+            You can do this with policy, design, and operational norms — not just tech.
+          </p>
+          <div class="grid2">
+            <div class="linkbox">
+              <h4 data-i18n="m8_box1">Institutional safeguards</h4>
+              <ul class="list">
+                <li data-i18n="m8_li1">Public logs: decisions, corrections, conflicts of interest.</li>
+                <li data-i18n="m8_li2">Default transparency for non-sensitive data.</li>
+                <li data-i18n="m8_li3">Independent oversight with publication rights.</li>
+                <li data-i18n="m8_li4">Opt-in analytics only; local-first whenever possible.</li>
+              </ul>
+              <div class="checkline">
+                <input type="checkbox" class="chk" data-id="m8_k1" />
+                <div class="txt">
+                  <b data-i18n="m8_k1_b">Write a “No Dark Patterns” procurement rule.</b>
+                  <div data-i18n="m8_k1_d">Make manipulative UX a contract violation.</div>
+                </div>
+              </div>
+            </div>
+            <div class="linkbox">
+              <h4 data-i18n="m8_box2">Design principles (applied)</h4>
+              <p class="muted" data-i18n="m8_p2">
+                People trust systems that let them verify, exit, and reset — especially during crisis.
+              </p>
+              <div class="pill warn"><span aria-hidden="true">🛡️</span> <span data-i18n="m8_pill">Transparency + consent are stability tech.</span></div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section id="score" aria-label="Score & local data">
+      <div class="row">
+        <div class="col">
+          <div class="glass" style="padding:14px">
+            <h2 style="margin:0 0 8px" data-i18n="score_title">Local Progress (Private to this Device)</h2>
+            <p class="muted" style="margin:0 0 12px" data-i18n="score_sub">
+              Use this as a meeting facilitator: small commitments, visible follow-through, compounding trust.
+            </p>
+
+            <div class="kpi">
+              <div class="card">
+                <h3 data-i18n="score_k1">Checklist points</h3>
+                <p><span class="mono" id="pts">0</span> <span class="muted" data-i18n="score_k1u">pts</span></p>
+              </div>
+              <div class="card">
+                <h3 data-i18n="score_k2">Streak</h3>
+                <p><span class="mono" id="streak">0</span> <span class="muted" data-i18n="score_k2u">days</span></p>
+              </div>
+              <div class="card">
+                <h3 data-i18n="score_k3">Modules completed</h3>
+                <p><span class="mono" id="modsDone">0</span> <span class="muted" data-i18n="score_k3u">/ 8</span></p>
+              </div>
+            </div>
+
+            <div class="hr"></div>
+            <div class="row">
+              <button class="btn ghost" id="today" title="TOOLTIP: Commit - sets today's streak anchor. Extend: add calendar view. Outcome: continuity.">
+                📅 <span data-i18n="btn_today">Mark Today</span>
+              </button>
+              <button class="btn ghost" id="copyBrief" title="TOOLTIP: Copy brief - creates a plaintext summary for emails/briefings. Extend: add markdown export. Outcome: rapid sharing (manual).">
+                🧾 <span data-i18n="btn_copybrief">Copy Brief</span>
+              </button>
+            </div>
+
+            <p class="fine" style="margin-top:10px" data-i18n="score_fine">
+              Export creates a local JSON file you can share manually. This page never auto-sends anything.
+            </p>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="glass" style="padding:14px">
+            <h2 style="margin:0 0 8px" data-i18n="viz_title">Constellation (State Visualizer)</h2>
+            <p class="muted" style="margin:0 0 12px" data-i18n="viz_sub">
+              A tiny “systems map” showing which modules are active and how progress clusters.
+            </p>
+            <canvas id="constellation" width="720" height="240" aria-label="Constellation visualization"></canvas>
+            <div class="hr"></div>
+            <div class="warnbox">
+              <b data-i18n="viz_note_h">No hidden telemetry.</b>
+              <span data-i18n="viz_note_b">
+                The constellation is drawn from local checkbox state only. Reset wipes it.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sources" aria-label="Sources and attributions">
+      <footer>
+        <h3 data-i18n="src_title">Sources (External Links)</h3>
+        <div class="grid2">
+          <div class="linkbox">
+            <h4 data-i18n="src_h1">Governance & Trust</h4>
+            <ul>
+              <li><a href="https://www.oecd.org/en/data/indicators/trust-in-government.html" target="_blank" rel="noopener noreferrer">OECD: Trust in government indicator</a></li>
+              <li><a href="https://www.oecd.org/en/publications/oecd-survey-on-drivers-of-trust-in-public-institutions-2024-results_9a20554b-en.html" target="_blank" rel="noopener noreferrer">OECD: Survey on Drivers of Trust (2024)</a></li>
+              <li><a href="https://www.worldbank.org/en/publication/worldwide-governance-indicators" target="_blank" rel="noopener noreferrer">World Bank: Worldwide Governance Indicators (WGI)</a></li>
+              <li><a href="https://databank.worldbank.org/source/worldwide-governance-indicators" target="_blank" rel="noopener noreferrer">WGI DataBank dataset</a></li>
+            </ul>
+          </div>
+          <div class="linkbox">
+            <h4 data-i18n="src_h2">Crisis Governance & Resilience</h4>
+            <ul>
+              <li><a href="https://www.undp.org/sites/g/files/zskgke326/files/2025-09/undp-toolkit-to-strengthen-multi-level_governance-in-crisis-affected_settings.pdf" target="_blank" rel="noopener noreferrer">UNDP: Multi-level governance toolkit (PDF)</a></li>
+              <li><a href="https://www.undp.org/publications/global-toolkit-3x6-approach-building-resilience-through-jobs-and-livelihoods" target="_blank" rel="noopener noreferrer">UNDP: 3x6 approach toolkit</a></li>
+              <li><a href="https://ses-toolkit.info.undp.org/sustainability-and-resilience" target="_blank" rel="noopener noreferrer">UNDP SES Toolkit: sustainability & resilience</a></li>
+              <li><a href="https://www.undp.org/publications/strengthening-disaster-risk-governance" target="_blank" rel="noopener noreferrer">UNDP: disaster risk governance</a></li>
+            </ul>
+          </div>
+          <div class="linkbox">
+            <h4 data-i18n="src_h3">Innovation & Responsible AI</h4>
+            <ul>
+              <li><a href="https://thegovlab.org/" target="_blank" rel="noopener noreferrer">The GovLab</a></li>
+              <li><a href="https://ailocalism.org/" target="_blank" rel="noopener noreferrer">AI Localism (GovLab)</a></li>
+            </ul>
+          </div>
+          <div class="linkbox">
+            <h4 data-i18n="src_h4">Attributions & Licensing</h4>
+            <p class="fine" data-i18n="attr_p1">
+              This file is original. It adapts general open patterns (not copied proprietary code).
+              Inspirations: MDN’s public guidance on Service Workers and IndexedDB usage patterns.
+            </p>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API" target="_blank" rel="noopener noreferrer">MDN: Service Worker API</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" target="_blank" rel="noopener noreferrer">MDN: IndexedDB API</a></li>
+            </ul>
+            <p class="fine">
+              License suggestion: <span class="mono">MIT</span> or <span class="mono">Apache-2.0</span> (choose based on your governance needs).
+            </p>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <h3 data-i18n="zero_title">Zero-Harm & Anti-Inversion</h3>
+        <p class="fine" data-i18n="zero_body">
+          This toolkit is built to strengthen sovereignty through consent, transparency, auditability, and local control.
+          It avoids coercive framing, hidden telemetry, or “auto-send” features. All analytics (if added) must be opt-in, local-only, and resettable.
+        </p>
+      </footer>
+    </section>
+  </main>
+
+  <!-- HUD -->
+  <div class="hud" role="region" aria-label="Gamification HUD">
+    <div class="hudHead">
+      <div class="icon" aria-hidden="true" style="width:30px;height:30px">🧭</div>
+      <div style="display:flex; flex-direction:column">
+        <strong data-i18n="hud_title">HUD: Return Path</strong>
+        <span class="mini" id="hudSub" data-i18n="hud_sub">Complete checklists → points → continuity</span>
+      </div>
+      <div class="spacer"></div>
+      <button class="btn ghost" id="hudToggle" title="TOOLTIP: Toggle HUD collapse. Extend: remember state. Outcome: less screen use.">▾</button>
+    </div>
+    <div class="hudBody" id="hudBody">
+      <div class="hudRow">
+        <div class="hudStat">
+          <div class="v" id="pts2">0</div>
+          <div class="k" data-i18n="hud_pts">Points</div>
+        </div>
+        <div class="hudStat">
+          <div class="v" id="streak2">0</div>
+          <div class="k" data-i18n="hud_streak">Streak</div>
+        </div>
+        <div class="hudStat">
+          <div class="v" id="focus2">—</div>
+          <div class="k" data-i18n="hud_focus">Focus</div>
+        </div>
+      </div>
+      <div class="hudActions">
+        <button class="btn" id="focusNext" title="TOOLTIP: Focus next unchecked item. Extend: add previous. Outcome: guided flow.">
+          🎯 <span data-i18n="hud_next">Next</span>
+        </button>
+        <button class="btn ghost" id="miniReset" title="TOOLTIP: Reset just checklists & streak. Extend: partial resets. Outcome: controlled restart.">
+          ♻️ <span data-i18n="hud_reset">Reset</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================
+       TOOLTIP: Security / sanitation
+       - Purpose: avoid XSS via innerHTML; sanitize any user-facing text
+       - Extend: keep all user text as textContent
+       - Outcome: safer offline tool
+    ========================= */
+    const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+    const safeText = (s) => String(s ?? "").replace(/[<>]/g, "");
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+    /* =========================
+       TOOLTIP: Gentle rate limiting
+       - Purpose: avoid event spam / jank
+       - Extend: tune delay; reuse debounce for new inputs
+       - Outcome: smooth UI; fewer storage writes
+    ========================= */
+    function debounce(fn, ms=120){
+      let t = null;
+      return (...args) => {
+        if(t) clearTimeout(t);
+        t = setTimeout(() => fn(...args), ms);
+      };
+    }
+
+    /* =========================
+       TOOLTIP: IndexedDB (local-only state)
+       - Purpose: persist preferences + checklist state offline
+       - Extend: add new stores/keys; bump DB version
+       - Outcome: zero-telemetry continuity
+    ========================= */
+    const DB_NAME = "pathsback_db";
+    const DB_VER = 1;
+    const STORE = "kv";
+
+    function idbOpen(){
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VER);
+        req.onupgradeneeded = () => {
+          const db = req.result;
+          if(!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE);
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+      });
+    }
+    async function idbGet(key){
+      const db = await idbOpen();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, "readonly");
+        const st = tx.objectStore(STORE);
+        const req = st.get(key);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+        tx.oncomplete = () => db.close();
+      });
+    }
+    async function idbSet(key, val){
+      const db = await idbOpen();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, "readwrite");
+        const st = tx.objectStore(STORE);
+        const req = st.put(val, key);
+        req.onsuccess = () => resolve(true);
+        req.onerror = () => reject(req.error);
+        tx.oncomplete = () => db.close();
+      });
+    }
+    async function idbClear(){
+      const db = await idbOpen();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE, "readwrite");
+        const st = tx.objectStore(STORE);
+        const req = st.clear();
+        req.onsuccess = () => resolve(true);
+        req.onerror = () => reject(req.error);
+        tx.oncomplete = () => db.close();
+      });
+    }
+
+    /* =========================
+       TOOLTIP: Offline-first Service Worker (in-file via Blob)
+       - Purpose: cache this single-file app for offline usage
+       - Extend: add more assets if you split files later
+       - Outcome: reliable offline access
+    ========================= */
+    async function registerSW(){
+      if(!("serviceWorker" in navigator)) return false;
+      try{
+        const swCode = `
+          const CACHE = "pathsback_cache_v1";
+          self.addEventListener("install", (e) => {
+            e.waitUntil((async () => {
+              await self.skipWaiting();
+              const cache = await caches.open(CACHE);
+              // Best-effort cache current page on install (works when served from a web server).
+              try{
+                const req = new Request(self.location.href, {cache: "reload"});
+                const res = await fetch(req);
+                if(res && res.ok) await cache.put(req, res.clone());
+              }catch(_){}
+            })());
+          });
+          self.addEventListener("activate", (e) => {
+            e.waitUntil((async () => {
+              const keys = await caches.keys();
+              await Promise.all(keys.map(k => (k===CACHE)?null:caches.delete(k)));
+              await self.clients.claim();
+            })());
+          });
+          self.addEventListener("fetch", (e) => {
+            const req = e.request;
+            if(req.method !== "GET") return;
+            e.respondWith((async () => {
+              const cache = await caches.open(CACHE);
+              const cached = await cache.match(req, {ignoreSearch:false});
+              if(cached) return cached;
+              try{
+                const fresh = await fetch(req);
+                const url = new URL(req.url);
+                const ctype = (fresh.headers.get("content-type")||"");
+                if(url.origin === self.location.origin && ctype.includes("text/html")){
+                  cache.put(req, fresh.clone());
+                }
+                return fresh;
+              }catch(err){
+                // Offline fallback: try current location without search/hash
+                const fallbackReq = new Request(self.location.href.split("#")[0], {method:"GET"});
+                const fallback = await cache.match(fallbackReq);
+                return fallback || new Response("Offline and no cached copy available.", {status: 503, headers: {"Content-Type":"text/plain"}});
+              }
+            })());
+          });
+        `;
+        const blob = new Blob([swCode], {type:"text/javascript"});
+        const url = URL.createObjectURL(blob);
+        await navigator.serviceWorker.register(url, {scope:"./"});
+        return true;
+      }catch(e){
+        return false;
+      }
+    }
+
+    /* =========================
+       TOOLTIP: i18n translation engine (20+ languages)
+       - Purpose: instant language swap, offline, no external APIs
+       - Extend: add keys; keep all visible strings behind data-i18n keys
+       - Outcome: multilingual access without telemetry
+    ========================= */
+    const LANGS = ["en","fr","es","ar","zh","ru","hi","bn","pt","de","ja","ko","it","tr","vi","id","sw","fa","ur","he","nl","pl"];
+
+    const I18N = {
+      en: {
+        splash_title:"Paths Back",
+        splash_sub:"A calm, offline-capable toolkit to help institutions rebuild trust, coordination, and legitimacy — without doom spirals or coercive framing.",
+        splash_localonly:"Local-only", splash_state:" state • resettable",
+        splash_offline:"Offline", splash_ready:" ready",
+        splash_transparent:"Transparent", splash_design:" by design",
+        splash_boot:"Booting tools…",
+        splash_hint:"Tip: use Search to find “trust”, “misinfo”, “coordination”, “resilience”, “social contract”.",
+        brand_title:"Paths Back", brand_sub:"Sovereignty Toolkit • Offline-first • Local-only",
+        nav_start:"Start", nav_modules:"Modules", nav_score:"Score", nav_sources:"Sources",
+        btn_reset:"Reset",
+        hero_title:"Tools to Help Institutions Find Their Path Back",
+        hero_lead:"Collapse can arrive via morale failure, institutional distrust, and broken shared reality — even without climate being the immediate trigger. This page is a practical “return path” kit: diagnose what’s breaking, choose interventions, measure recovery, and rebuild legitimacy.",
+        btn_quickstart:"Quick Start", btn_quickstart_sub:"Open Module 1",
+        btn_expand:"Expand All", btn_print:"Print View",
+        note_header:"Important framing:", note_body:"Simulations are models, not prophecies. Use them to widen options, reduce harm, and restore agency — not to justify coercion or fatalism.",
+        aside_title:"How to Use This",
+        aside_li1:"Pick 1–2 modules for your current bottleneck (trust, coordination, information integrity).",
+        aside_li2:"Complete the checklists. Each item nudges the HUD score + streak.",
+        aside_li3:"Use the linked sources for deeper evidence and implementation playbooks.",
+        aside_li4:"Reset anytime. All data stays on this device unless you export manually.",
+        kpi1_title:"Goal", kpi1_body:"Restore legitimacy by improving transparency, competence signals, and shared reality.",
+        kpi2_title:"Method", kpi2_body:"Small reversible steps + measurement + public learning loops.",
+        mod_label:"Modules", mod_label_sub:" (collapsible)",
+        search_tip:"Search tip:", search_tip_sub:" try “trust”, “rumor”, “delivery”, “metrics”.",
+        btn_collapse:"Collapse All", btn_export:"Export", btn_wipe:"Wipe Local Data",
+        complete:"Complete",
+        tag_foundation:"Foundation", tag_trust:"Trust", tag_info:"Information", tag_coord:"Coordination", tag_metrics:"Metrics", tag_crisis:"Crisis", tag_sim:"Simulation", tag_safety:"Safety",
+        m1_title:"1) Diagnose the Real Failure Mode", m1_sub:"Is it competence, integrity, or shared reality?",
+        m1_p1:"Most institutional collapses look like “everything is failing” from the inside. Usually, one primary failure is driving the others: (A) competence (delivery), (B) integrity (corruption/conflicts), or (C) shared reality (information breakdown).",
+        m1_box1:"Rapid triage questions",
+        m1_q1_b:"What promise is being broken?", m1_q1_d:"Name it in one sentence, without blame language.",
+        m1_q2_b:"Where is coordination failing?", m1_q2_d:"Across agencies, regions, incentives, or data systems?",
+        m1_q3_b:"What would “one week better” look like?", m1_q3_d:"Pick a measurable improvement, not a speech.",
+        m1_box2:"Evidence anchors",
+        m1_link1:"OECD: Trust in government indicator",
+        m1_link2:"OECD: Drivers of Trust Survey (2024)",
+        m1_link3:"World Bank: Worldwide Governance Indicators (WGI)",
+        m1_fine:"Use these as “common reference points” to reduce argument heat and increase shared measurement.",
+        m2_title:"2) Rebuild the Social Contract (without propaganda)", m2_sub:"Legitimacy comes from truth + delivery + fairness signals.",
+        m2_p1:"The fastest trust gains usually come from: (1) clear commitments, (2) visible follow-through, (3) admitting uncertainty early, and (4) fair process. The goal is not persuasion; the goal is predictable honesty.",
+        m2_box1:"Commitment loop",
+        m2_c1_b:"Publish “3 promises, 3 metrics, 3 weeks”.", m2_c1_d:"Keep it small enough to deliver. Update weekly in public.",
+        m2_c2_b:"Create an error budget for messaging.", m2_c2_d:"Track corrections. Reward early truth over late perfection.",
+        m2_c3_b:"Guarantee a dignified exit path.", m2_c3_d:"Make it safe for staff and citizens to report failure without retaliation.",
+        m2_box2:"Implementation ideas",
+        m2_li1:"Short public “decision records” (what we chose, why, what would change our mind).",
+        m2_li2:"Plain-language budget + delivery dashboard (even if imperfect).",
+        m2_li3:"Independent audit/ombuds with real power to publish.",
+        m2_fine:"Trust grows when people can predict reality better than rumor can.",
+        m3_title:"3) Restore Shared Reality (info integrity)", m3_sub:"Counter rumor with verification infrastructure, not censorship theater.",
+        m3_p1:"When people stop agreeing on basic facts, policy becomes impossible. The fix is to make verification cheaper than outrage: publish data, publish methods, publish uncertainty, and publish corrections.",
+        m3_box1:"Verification kit",
+        m3_v1_b:"Create a “single source of official truth” page.", m3_v1_d:"Versioned updates, timestamped changes, and a corrections log.",
+        m3_v2_b:"Publish decision evidence, not just decisions.", m3_v2_d:"Data sources + assumptions + trade-offs in human language.",
+        m3_v3_b:"Red-team your own communications.", m3_v3_d:"Test how messages can be misunderstood or weaponized.",
+        m3_box2:"Governance innovation references",
+        m3_link1:"The GovLab (governance innovation)",
+        m3_link2:"AI Localism (responsible AI at local level)",
+        m3_fine:"Aim for “trustworthy systems” more than “trusted leaders.”",
+        m4_title:"4) Fix Coordination (the hidden killer)", m4_sub:"Align incentives, interfaces, and ownership.",
+        m4_p1:"Institutions often die by “interface.” Not the internet interface — the organizational interface: unclear ownership, incompatible data, contradictory incentives, and slow feedback.",
+        m4_box1:"Coordination checklist",
+        m4_k1_b:"Define one accountable owner per outcome.", m4_k1_d:"Not “everyone”, not “a committee”. One neck, supported by many hands.",
+        m4_k2_b:"Create shared operational definitions.", m4_k2_d:"If agencies define “success” differently, you get phantom progress.",
+        m4_k3_b:"Shorten feedback loops.", m4_k3_d:"Daily/weekly signals beat quarterly reports during instability.",
+        m4_box2:"Crisis governance resources",
+        m4_link1:"UNDP: Multi-level governance toolkit (PDF)",
+        m4_link2:"UNDP: 3x6 resilience & livelihoods toolkit",
+        m4_fine:"Multi-level governance works best when roles are explicit and data is shared by default.",
+        m5_title:"5) Measure Recovery (so it’s not vibes)", m5_sub:"Simple metrics that track legitimacy, delivery, and fairness.",
+        m5_p1:"Your measurement system should be boring and resistant to spin. Measure what citizens feel in their daily interface with the state: speed, fairness, clarity, and correction.",
+        m5_box1:"Starter metrics (pick 5)",
+        m5_li1:"Time-to-resolution for top 3 public services.",
+        m5_li2:"% decisions with published decision record + evidence.",
+        m5_li3:"Correction latency (time to publicly correct an error).",
+        m5_li4:"Perceived fairness pulse (short survey, consistent wording).",
+        m5_li5:"Frontline staff burnout proxy (retention/absence trends).",
+        m5_k1_b:"Publish a weekly “learning memo.”", m5_k1_d:"What worked, what didn’t, what changes next week.",
+        m5_box2:"Governance baselines",
+        m5_link1:"World Bank DataBank: WGI dataset",
+        m5_link2:"OECD: Trust in government topic page",
+        m5_fine:"Baselines help you tell the difference between “hard times” and “system failure.”",
+        m6_title:"6) Crisis Protocol: Stabilize Morale Without Lying", m6_sub:"Truthful reassurance + actionable steps + visible care.",
+        m6_p1:"Morale collapses when people feel: (1) blind, (2) alone, or (3) trapped. Counter with: clarity, community, and exit ramps. Your job is to make constructive action feel possible again.",
+        m6_box1:"Stabilization checklist",
+        m6_s1_b:"Daily “known / unknown / next” bulletin.", m6_s1_d:"Short. Timestamped. Includes one practical next step.",
+        m6_s2_b:"Protect frontline truth-tellers.", m6_s2_d:"No retaliation for raising risks; reward signal quality.",
+        m6_s3_b:"Create a “help map” for citizens.", m6_s3_d:"Where to go, what to bring, how long it takes, what’s free.",
+        m6_box2:"Resilience resources",
+        m6_link1:"UNDP SES Toolkit: sustainability & resilience",
+        m6_link2:"UNDP: strengthening disaster risk governance",
+        m6_fine:"“Calm” is not silence — it’s honest structure.",
+        m7_title:"7) Run Safe Simulations (tabletop / scenario)", m7_sub:"Model the institution, not your identity. Prevent coercive drift.",
+        m7_p1:"Scenario work is powerful because it makes hidden assumptions visible. Keep it safe by requiring consent, defining stop rules, and separating “model output” from “moral mandate.”",
+        m7_box1:"Scenario structure",
+        m7_li1:"Define variables: trust, legitimacy, service delivery, info integrity, incentives.",
+        m7_li2:"Inject shocks: rumor spike, budget freeze, leadership scandal, outage, protest.",
+        m7_li3:"Track outcomes: time-to-correction, coordination speed, perceived fairness, violence risk.",
+        m7_s1_b:"Write 3 “recovery endings,” not 1 collapse ending.", m7_s1_d:"Prevent fatalism. Practice repair.",
+        m7_box2:"Guardrails",
+        m7_g1_b:"No coercion rule.", m7_g1_d:"Any intervention must preserve consent and legal rights.",
+        m7_g2_b:"Stop rule.", m7_g2_d:"If participants feel overwhelmed or dehumanized, pause and debrief.",
+        m7_g3_b:"Publish lessons, not scapegoats.", m7_g3_d:"The goal is learning, not blame.",
+        m8_title:"8) Build “Anti-Inversion” Institutions", m8_sub:"Reduce manipulation risk through transparency and user control.",
+        m8_p1:"“Anti-inversion” means systems that resist narrative coercion: they make intent visible, allow audits, and preserve user agency. You can do this with policy, design, and operational norms — not just tech.",
+        m8_box1:"Institutional safeguards",
+        m8_li1:"Public logs: decisions, corrections, conflicts of interest.",
+        m8_li2:"Default transparency for non-sensitive data.",
+        m8_li3:"Independent oversight with publication rights.",
+        m8_li4:"Opt-in analytics only; local-first whenever possible.",
+        m8_k1_b:"Write a “No Dark Patterns” procurement rule.", m8_k1_d:"Make manipulative UX a contract violation.",
+        m8_box2:"Design principles (applied)",
+        m8_p2:"People trust systems that let them verify, exit, and reset — especially during crisis.",
+        m8_pill:"Transparency + consent are stability tech.",
+        score_title:"Local Progress (Private to this Device)",
+        score_sub:"Use this as a meeting facilitator: small commitments, visible follow-through, compounding trust.",
+        score_k1:"Checklist points", score_k1u:"pts",
+        score_k2:"Streak", score_k2u:"days",
+        score_k3:"Modules completed", score_k3u:"/ 8",
+        btn_today:"Mark Today", btn_copybrief:"Copy Brief",
+        score_fine:"Export creates a local JSON file you can share manually. This page never auto-sends anything.",
+        viz_title:"Constellation (State Visualizer)",
+        viz_sub:"A tiny “systems map” showing which modules are active and how progress clusters.",
+        viz_note_h:"No hidden telemetry.", viz_note_b:"The constellation is drawn from local checkbox state only. Reset wipes it.",
+        src_title:"Sources (External Links)",
+        src_h1:"Governance & Trust", src_h2:"Crisis Governance & Resilience", src_h3:"Innovation & Responsible AI", src_h4:"Attributions & Licensing",
+        attr_p1:"This file is original. It adapts general open patterns (not copied proprietary code). Inspirations: MDN’s public guidance on Service Workers and IndexedDB usage patterns.",
+        zero_title:"Zero-Harm & Anti-Inversion",
+        zero_body:"This toolkit is built to strengthen sovereignty through consent, transparency, auditability, and local control. It avoids coercive framing, hidden telemetry, or “auto-send” features. All analytics (if added) must be opt-in, local-only, and resettable.",
+        hud_title:"HUD: Return Path",
+        hud_sub:"Complete checklists → points → continuity",
+        hud_pts:"Points", hud_streak:"Streak", hud_focus:"Focus",
+        hud_next:"Next", hud_reset:"Reset"
+      }
+    };
+
+    // Fill missing keys with English so nothing shows blank.
+    function mergeLang(lang){
+      const base = I18N.en;
+      const local = I18N[lang] || {};
+      const merged = {};
+      for(const k of Object.keys(base)) merged[k] = (k in local) ? local[k] : base[k];
+      return merged;
+    }
+
+    // Compact translations (policy-grade nuance benefits from human review; fallbacks ensure completeness).
+    I18N.fr = {
+      splash_title:"Chemins de retour",
+      splash_sub:"Un kit calme et utilisable hors ligne pour aider les institutions à reconstruire la confiance, la coordination et la légitimité — sans spirales de peur ni cadrage coercitif.",
+      splash_localonly:"Local", splash_state:" uniquement • réinitialisable",
+      splash_offline:"Hors ligne", splash_ready:" prêt",
+      splash_transparent:"Transparent", splash_design:" par conception",
+      splash_boot:"Démarrage…",
+      splash_hint:"Astuce : cherchez « confiance », « désinfo », « coordination », « résilience », « contrat social ».",
+      brand_title:"Chemins de retour", brand_sub:"Kit de souveraineté • Hors ligne • Local",
+      nav_start:"Début", nav_modules:"Modules", nav_score:"Score", nav_sources:"Sources",
+      btn_reset:"Réinitialiser",
+      btn_expand:"Tout développer", btn_print:"Imprimer",
+      btn_quickstart:"Démarrage rapide", btn_quickstart_sub:"Ouvrir Module 1",
+      note_header:"Cadre important :", note_body:"Les simulations sont des modèles, pas des prophéties. Elles servent à ouvrir des options, réduire les risques et restaurer l’agence — pas à justifier la coercition ou le fatalisme.",
+      complete:"Terminé",
+      btn_collapse:"Tout replier", btn_export:"Exporter", btn_wipe:"Effacer les données",
+      score_title:"Progrès local (privé à cet appareil)",
+      btn_today:"Marquer aujourd’hui", btn_copybrief:"Copier un résumé",
+      hud_title:"HUD : Chemin de retour", hud_next:"Suivant", hud_reset:"Réinitialiser"
+    };
+
+    I18N.es = {
+      splash_title:"Caminos de regreso",
+      splash_sub:"Un kit tranquilo y usable sin conexión para ayudar a instituciones a reconstruir confianza, coordinación y legitimidad — sin espirales de fatalismo ni encuadre coercitivo.",
+      brand_title:"Caminos de regreso", brand_sub:"Kit de soberanía • Offline-first • Solo local",
+      nav_start:"Inicio", nav_modules:"Módulos", nav_score:"Puntaje", nav_sources:"Fuentes",
+      btn_reset:"Restablecer", btn_expand:"Expandir todo", btn_print:"Imprimir",
+      btn_quickstart:"Inicio rápido", btn_quickstart_sub:"Abrir Módulo 1",
+      btn_collapse:"Contraer todo", btn_export:"Exportar", btn_wipe:"Borrar datos",
+      complete:"Completo",
+      score_title:"Progreso local (privado en este dispositivo)",
+      btn_today:"Marcar hoy", btn_copybrief:"Copiar resumen",
+      hud_title:"HUD: Ruta de regreso", hud_next:"Siguiente", hud_reset:"Restablecer"
+    };
+
+    I18N.ar = {
+      splash_title:"مسارات العودة",
+      splash_sub:"أداة هادئة تعمل دون اتصال لمساعدة المؤسسات على إعادة بناء الثقة والتنسيق والشرعية — دون خطاب قسري أو دوامات يأس.",
+      brand_title:"مسارات العودة", brand_sub:"حزمة سيادة • دون اتصال • محلي فقط",
+      nav_start:"البداية", nav_modules:"الوحدات", nav_score:"النقاط", nav_sources:"المصادر",
+      btn_reset:"إعادة ضبط", btn_expand:"توسيع الكل", btn_print:"طباعة",
+      btn_quickstart:"بدء سريع", btn_quickstart_sub:"فتح الوحدة 1",
+      btn_collapse:"طيّ الكل", btn_export:"تصدير", btn_wipe:"مسح البيانات",
+      complete:"مكتمل",
+      score_title:"تقدّم محلي (خاص بهذا الجهاز)",
+      btn_today:"تسجيل اليوم", btn_copybrief:"نسخ ملخص",
+      hud_title:"HUD: مسار العودة", hud_next:"التالي", hud_reset:"إعادة ضبط"
+    };
+
+    I18N.zh = {
+      splash_title:"回归之路",
+      splash_sub:"一套冷静、可离线使用的工具包，帮助机构重建信任、协同与合法性——避免恐慌式叙事与强制性框架。",
+      brand_title:"回归之路", brand_sub:"主权工具包 • 离线优先 • 仅本地",
+      nav_start:"开始", nav_modules:"模块", nav_score:"得分", nav_sources:"来源",
+      btn_reset:"重置", btn_expand:"全部展开", btn_print:"打印",
+      btn_quickstart:"快速开始", btn_quickstart_sub:"打开模块 1",
+      btn_collapse:"全部折叠", btn_export:"导出", btn_wipe:"清除数据",
+      complete:"完成",
+      score_title:"本地进度（仅此设备）",
+      btn_today:"标记今天", btn_copybrief:"复制摘要",
+      hud_title:"HUD：回归路径", hud_next:"下一项", hud_reset:"重置"
+    };
+
+    I18N.ru = {
+      splash_title:"Пути назад",
+      splash_sub:"Спокойный офлайн-набор инструментов для восстановления доверия, координации и легитимности — без паники и принуждения.",
+      brand_title:"Пути назад", brand_sub:"Набор суверенитета • Офлайн • Только локально",
+      nav_start:"Старт", nav_modules:"Модули", nav_score:"Счёт", nav_sources:"Источники",
+      btn_reset:"Сброс", btn_expand:"Развернуть всё", btn_print:"Печать",
+      btn_quickstart:"Быстрый старт", btn_quickstart_sub:"Открыть модуль 1",
+      btn_collapse:"Свернуть всё", btn_export:"Экспорт", btn_wipe:"Удалить данные",
+      complete:"Готово",
+      score_title:"Локальный прогресс (только на этом устройстве)",
+      btn_today:"Отметить сегодня", btn_copybrief:"Скопировать сводку",
+      hud_title:"HUD: Путь назад", hud_next:"Далее", hud_reset:"Сброс"
+    };
+
+    I18N.hi = { splash_title:"वापसी के रास्ते", brand_title:"वापसी के रास्ते", nav_start:"शुरू", nav_modules:"मॉड्यूल", nav_score:"स्कोर", nav_sources:"स्रोत", btn_reset:"रीसेट", btn_expand:"सब खोलें", btn_print:"प्रिंट", btn_quickstart:"त्वरित शुरुआत", btn_quickstart_sub:"मॉड्यूल 1 खोलें", btn_collapse:"सब समेटें", btn_export:"एक्सपोर्ट", btn_wipe:"डेटा मिटाएँ", complete:"पूर्ण", score_title:"स्थानीय प्रगति (इस डिवाइस पर)", btn_today:"आज चिह्नित करें", btn_copybrief:"सार कॉपी करें", hud_title:"HUD: वापसी पथ", hud_next:"अगला", hud_reset:"रीसेट" };
+    I18N.bn = { splash_title:"ফিরে আসার পথ", brand_title:"ফিরে আসার পথ", nav_start:"শুরু", nav_modules:"মডিউল", nav_score:"স্কোর", nav_sources:"সূত্র", btn_reset:"রিসেট", btn_expand:"সব খুলুন", btn_print:"প্রিন্ট", btn_quickstart:"দ্রুত শুরু", btn_quickstart_sub:"মডিউল ১ খুলুন", btn_collapse:"সব ভাঁজ", btn_export:"এক্সপোর্ট", btn_wipe:"ডেটা মুছুন", complete:"সম্পূর্ণ", score_title:"লোকাল অগ্রগতি (এই ডিভাইসে)", btn_today:"আজ চিহ্নিত করুন", btn_copybrief:"সারাংশ কপি", hud_title:"HUD: ফিরে আসার পথ", hud_next:"পরবর্তী", hud_reset:"রিসেট" };
+    I18N.pt = { splash_title:"Caminhos de volta", brand_title:"Caminhos de volta", nav_start:"Início", nav_modules:"Módulos", nav_score:"Pontuação", nav_sources:"Fontes", btn_reset:"Redefinir", btn_expand:"Expandir tudo", btn_print:"Imprimir", btn_quickstart:"Início rápido", btn_quickstart_sub:"Abrir Módulo 1", btn_collapse:"Recolher tudo", btn_export:"Exportar", btn_wipe:"Apagar dados", complete:"Concluído", score_title:"Progresso local (neste dispositivo)", btn_today:"Marcar hoje", btn_copybrief:"Copiar resumo", hud_title:"HUD: Caminho de volta", hud_next:"Próximo", hud_reset:"Redefinir" };
+    I18N.de = { splash_title:"Wege zurück", brand_title:"Wege zurück", nav_start:"Start", nav_modules:"Module", nav_score:"Punkte", nav_sources:"Quellen", btn_reset:"Zurücksetzen", btn_expand:"Alle öffnen", btn_print:"Drucken", btn_quickstart:"Schnellstart", btn_quickstart_sub:"Modul 1 öffnen", btn_collapse:"Alle schließen", btn_export:"Export", btn_wipe:"Daten löschen", complete:"Fertig", score_title:"Lokaler Fortschritt (dieses Gerät)", btn_today:"Heute markieren", btn_copybrief:"Kurzbrief kopieren", hud_title:"HUD: Rückweg", hud_next:"Weiter", hud_reset:"Zurücksetzen" };
+    I18N.ja = { splash_title:"回復の道", brand_title:"回復の道", nav_start:"開始", nav_modules:"モジュール", nav_score:"スコア", nav_sources:"資料", btn_reset:"リセット", btn_expand:"すべて展開", btn_print:"印刷", btn_quickstart:"クイック開始", btn_quickstart_sub:"モジュール1を開く", btn_collapse:"すべて折りたたむ", btn_export:"エクスポート", btn_wipe:"データ消去", complete:"完了", score_title:"ローカル進捗（この端末）", btn_today:"今日を記録", btn_copybrief:"要約をコピー", hud_title:"HUD：回復ルート", hud_next:"次へ", hud_reset:"リセット" };
+    I18N.ko = { splash_title:"되돌아가는 길", brand_title:"되돌아가는 길", nav_start:"시작", nav_modules:"모듈", nav_score:"점수", nav_sources:"출처", btn_reset:"초기화", btn_expand:"모두 펼치기", btn_print:"인쇄", btn_quickstart:"빠른 시작", btn_quickstart_sub:"모듈 1 열기", btn_collapse:"모두 접기", btn_export:"내보내기", btn_wipe:"데이터 삭제", complete:"완료", score_title:"로컬 진행(이 기기)", btn_today:"오늘 표시", btn_copybrief:"요약 복사", hud_title:"HUD: 복귀 경로", hud_next:"다음", hud_reset:"초기화" };
+    I18N.it = { splash_title:"Percorsi di ritorno", brand_title:"Percorsi di ritorno", nav_start:"Inizio", nav_modules:"Moduli", nav_score:"Punteggio", nav_sources:"Fonti", btn_reset:"Reimposta", btn_expand:"Espandi tutto", btn_print:"Stampa", btn_quickstart:"Avvio rapido", btn_quickstart_sub:"Apri Modulo 1", btn_collapse:"Comprimi tutto", btn_export:"Esporta", btn_wipe:"Cancella dati", complete:"Completato", score_title:"Progresso locale (questo dispositivo)", btn_today:"Segna oggi", btn_copybrief:"Copia riepilogo", hud_title:"HUD: Percorso di ritorno", hud_next:"Avanti", hud_reset:"Reimposta" };
+    I18N.tr = { splash_title:"Geri Dönüş Yolları", brand_title:"Geri Dönüş Yolları", nav_start:"Başlangıç", nav_modules:"Modüller", nav_score:"Skor", nav_sources:"Kaynaklar", btn_reset:"Sıfırla", btn_expand:"Tümünü aç", btn_print:"Yazdır", btn_quickstart:"Hızlı Başla", btn_quickstart_sub:"Modül 1'i aç", btn_collapse:"Tümünü kapat", btn_export:"Dışa aktar", btn_wipe:"Veriyi sil", complete:"Tamam", score_title:"Yerel ilerleme (bu cihaz)", btn_today:"Bugünü işaretle", btn_copybrief:"Özet kopyala", hud_title:"HUD: Dönüş Yolu", hud_next:"Sonraki", hud_reset:"Sıfırla" };
+    I18N.vi = { splash_title:"Con đường quay lại", brand_title:"Con đường quay lại", nav_start:"Bắt đầu", nav_modules:"Mô-đun", nav_score:"Điểm", nav_sources:"Nguồn", btn_reset:"Đặt lại", btn_expand:"Mở tất cả", btn_print:"In", btn_quickstart:"Bắt đầu nhanh", btn_quickstart_sub:"Mở Mô-đun 1", btn_collapse:"Thu gọn", btn_export:"Xuất", btn_wipe:"Xóa dữ liệu", complete:"Hoàn tất", score_title:"Tiến độ cục bộ (thiết bị này)", btn_today:"Đánh dấu hôm nay", btn_copybrief:"Chép tóm tắt", hud_title:"HUD: Lộ trình", hud_next:"Tiếp", hud_reset:"Đặt lại" };
+    I18N.id = { splash_title:"Jalur Kembali", brand_title:"Jalur Kembali", nav_start:"Mulai", nav_modules:"Modul", nav_score:"Skor", nav_sources:"Sumber", btn_reset:"Reset", btn_expand:"Buka semua", btn_print
